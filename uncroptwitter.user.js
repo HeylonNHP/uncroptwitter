@@ -37,39 +37,81 @@
             var layer2 = layer1.firstChild;
 
             if(layer2 == null){
-                continue;
-            }
+                //multi image
+                var bgImageContainers = element.getElementsByClassName("css-1dbjc4n r-1p0dtai r-1mlwlqe r-1d2f490 r-61z16t r-1udh08x r-u8s1d r-zchlnj r-ipm5af r-417010");
 
-            var bgImageElement = layer2.firstChild;
-            var imageElement = layer2.lastChild;
+                for(var j = 0; j<bgImageContainers.length;++j){
+                    var bgImageContainer = bgImageContainers[j];
 
-            var setSize = "n";
+                    //Remove padding so image is centred
+                    bgImageContainer.style.marginTop = '0%';
+                    bgImageContainer.style.marginBottom = '0%';
+                    bgImageContainer.style.marginLeft = '0%';
+                    bgImageContainer.style.marginRight = '0%';
 
-            var scaleFactorW = element.clientWidth/imageElement.naturalWidth;
-            var scaleFactorH = element.clientHeight/imageElement.naturalHeight;
-            var scaleFactor = 0;
+                    //Get width/height of container (requires sourcing the parent element)
+                    var bgImageContainerParent = bgImageContainer.parentElement;
+                    var containerW = bgImageContainerParent.clientWidth;
+                    var containerH = bgImageContainerParent.clientHeight;
 
-            if(scaleFactorW<scaleFactorH){
-                scaleFactor = scaleFactorW;
-            }else{
-                scaleFactor = scaleFactorH;
-            }
+                    //Get image div and its dimensions
+                    var imageDiv = bgImageContainer.firstChild;
+                    var imageW = imageDiv.naturalWidth;
+                    var imageH = imageDiv.naturalHeight;
 
-            bgImageElement.style.backgroundSize = (imageElement.naturalWidth*scaleFactor) + 'px ' +
+                    //Generate scaling factors for either
+                    //Fitting the image by its width
+                    //Or fitting the image by its height
+                    //Within the container
+                    var scaleFactorW = containerW/imageW;
+                    var scaleFactorH = containerH/imageH;
+
+                    //Find which scaling factor to use to scale the image
+                    var scaleFactor = -1;
+
+                    if(scaleFactorW<scaleFactorH){
+                        scaleFactor = scaleFactorW;
+                    }else {
+                        scaleFactor = scaleFactorH;
+                    }
+
+                    //Scale the image
+                    imageDiv.style.backgroundSize = (imageW*scaleFactor) + 'px ' +
+                        (imageH*scaleFactor) + 'px';
+                }
+
+            }else {
+                var bgImageElement = layer2.firstChild;
+                var imageElement = layer2.lastChild;
+
+                var setSize = "n";
+
+                var scaleFactorW = element.clientWidth/imageElement.naturalWidth;
+                var scaleFactorH = element.clientHeight/imageElement.naturalHeight;
+                var scaleFactor = 0;
+
+                if(scaleFactorW<scaleFactorH){
+                    scaleFactor = scaleFactorW;
+                }else{
+                    scaleFactor = scaleFactorH;
+                }
+
+                bgImageElement.style.backgroundSize = (imageElement.naturalWidth*scaleFactor) + 'px ' +
                     (imageElement.naturalHeight*scaleFactor) + 'px';
 
-            alert(imageElement.naturalWidth + " " + imageElement.naturalHeight + "\n" +
-                element.clientWidth + " " + element.clientHeight + "\n" + setSize);
+                alert(imageElement.naturalWidth + " " + imageElement.naturalHeight + "\n" +
+                    element.clientWidth + " " + element.clientHeight + "\n" + setSize);
 
-            //bgImageElement.style.backgroundSize = maxDimension + 'px';
+                //bgImageElement.style.backgroundSize = maxDimension + 'px';
 
-            layer2.style.marginTop = '0%';
-            layer2.style.marginBottom = '0%';
-            layer2.style.marginLeft = '0%';
-            layer2.style.marginRight = '0%';
+                layer2.style.marginTop = '0%';
+                layer2.style.marginBottom = '0%';
+                layer2.style.marginLeft = '0%';
+                layer2.style.marginRight = '0%';
 
 
-            //alert("done");
+                //alert("done");
+            }
         }
         alert(elementsString);
     }
