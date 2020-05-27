@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitter uncrop
 // @namespace    http://tampermonkey.net/
-// @version      0.2.1
+// @version      0.2.3
 // @description  try to take over the world!
 // @author       You
 // @match        https://twitter.com/home
@@ -11,7 +11,70 @@
 (function() {
     'use strict';
 
+    function processBgImageContainers(bgImageContainers) {
+        alert(bgImageContainers.length + " BG");
+
+        for(var j = 0; j<bgImageContainers.length;++j){
+            var bgImageContainer = bgImageContainers[j];
+            /*alert("MI - " + bgImageContainer.innerHTML +
+                "\n mTop" + bgImageContainer.style.marginTop +
+                "\n mLeft" + bgImageContainer.style.marginLeft +
+                "\n mBottom" + bgImageContainer.style.marginBottom);*/
+
+            //Remove padding so image is centred
+            bgImageContainer.style.marginTop = '0%';
+            bgImageContainer.style.marginBottom = '0%';
+            bgImageContainer.style.marginLeft = '0%';
+            bgImageContainer.style.marginRight = '0%';
+            bgImageContainer.style.margin = '0px';
+
+            //Get width/height of container (requires sourcing the parent element)
+            var bgImageContainerParent = bgImageContainer.parentElement;
+            var containerW = bgImageContainerParent.offsetWidth;
+            var containerH = bgImageContainerParent.offsetHeight;
+
+            //Get image div and its dimensions
+            var imageDiv = bgImageContainer.firstChild;
+            var imageDiv2 = bgImageContainer.lastChild;
+            var imageW = imageDiv2.naturalWidth;
+            var imageH = imageDiv2.naturalHeight;
+
+            imageDiv.style.backgroundSize = "50px";
+            /*alert("img " + containerW + " " + containerH + "\n"+
+                imageW + " " + imageH + "\n" +
+                bgImageContainerParent.innerHTML);*/
+
+            //Generate scaling factors for either
+            //Fitting the image by its width
+            //Or fitting the image by its height
+            //Within the container
+            var scaleFactorW = containerW/imageW;
+            var scaleFactorH = containerH/imageH;
+
+            //Find which scaling factor to use to scale the image
+            var scaleFactor = -1;
+
+            if(scaleFactorW<scaleFactorH){
+                scaleFactor = scaleFactorW;
+            }else {
+                scaleFactor = scaleFactorH;
+            }
+
+            //Scale the image
+            imageDiv.style.backgroundSize = (imageW*scaleFactor) + 'px ' +
+                (imageH*scaleFactor) + 'px';
+        }
+        //alert("multi-image done");
+    }
+
     function processImages() {
+
+        //add any background image container class signatures here
+        var bgImageContainers = document.getElementsByClassName("css-1dbjc4n r-1p0dtai r-1mlwlqe r-1d2f490 r-11wrixw r-1udh08x r-u8s1d r-zchlnj r-ipm5af r-417010");
+
+        processBgImageContainers(bgImageContainers);
+        return;
+
         var paddedTweetImageElements = document.getElementsByClassName("r-1adg3ll r-13qz1uu");
 
         var elementsString = "";
@@ -36,51 +99,8 @@
             var layer1 = imageContainingElement.getElementsByTagName("div")[1];
             var layer2 = layer1.firstChild;
 
-            if(layer2 == null){
-                //multi image
-                alert("trying multi-image");
-                var bgImageContainers = element.getElementsByClassName("css-1dbjc4n r-1p0dtai r-1mlwlqe r-1d2f490 r-61z16t r-1udh08x r-u8s1d r-zchlnj r-ipm5af r-417010");
+            if(layer2 == null || true){
 
-                for(var j = 0; j<bgImageContainers.length;++j){
-                    var bgImageContainer = bgImageContainers[j];
-
-                    //Remove padding so image is centred
-                    bgImageContainer.style.marginTop = '0%';
-                    bgImageContainer.style.marginBottom = '0%';
-                    bgImageContainer.style.marginLeft = '0%';
-                    bgImageContainer.style.marginRight = '0%';
-
-                    //Get width/height of container (requires sourcing the parent element)
-                    var bgImageContainerParent = bgImageContainer.parentElement;
-                    var containerW = bgImageContainerParent.clientWidth;
-                    var containerH = bgImageContainerParent.clientHeight;
-
-                    //Get image div and its dimensions
-                    var imageDiv = bgImageContainer.firstChild;
-                    var imageW = imageDiv.naturalWidth;
-                    var imageH = imageDiv.naturalHeight;
-
-                    //Generate scaling factors for either
-                    //Fitting the image by its width
-                    //Or fitting the image by its height
-                    //Within the container
-                    var scaleFactorW = containerW/imageW;
-                    var scaleFactorH = containerH/imageH;
-
-                    //Find which scaling factor to use to scale the image
-                    var scaleFactor = -1;
-
-                    if(scaleFactorW<scaleFactorH){
-                        scaleFactor = scaleFactorW;
-                    }else {
-                        scaleFactor = scaleFactorH;
-                    }
-
-                    //Scale the image
-                    imageDiv.style.backgroundSize = (imageW*scaleFactor) + 'px ' +
-                        (imageH*scaleFactor) + 'px';
-                }
-                alert("multi-image done");
 
             }else {
                 var bgImageElement = layer2.firstChild;
@@ -117,5 +137,6 @@
     }
 
     // Your code here...
-    setInterval(processImages,1000);
+    alert("go");
+    setInterval(processImages,10000);
 })();
