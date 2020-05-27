@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitter uncrop
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.2.1
 // @description  try to take over the world!
 // @author       You
 // @match        https://twitter.com/home
@@ -38,6 +38,7 @@
 
             if(layer2 == null){
                 //multi image
+                alert("trying multi-image");
                 var bgImageContainers = element.getElementsByClassName("css-1dbjc4n r-1p0dtai r-1mlwlqe r-1d2f490 r-61z16t r-1udh08x r-u8s1d r-zchlnj r-ipm5af r-417010");
 
                 for(var j = 0; j<bgImageContainers.length;++j){
@@ -79,6 +80,7 @@
                     imageDiv.style.backgroundSize = (imageW*scaleFactor) + 'px ' +
                         (imageH*scaleFactor) + 'px';
                 }
+                alert("multi-image done");
 
             }else {
                 var bgImageElement = layer2.firstChild;
@@ -99,10 +101,8 @@
                 bgImageElement.style.backgroundSize = (imageElement.naturalWidth*scaleFactor) + 'px ' +
                     (imageElement.naturalHeight*scaleFactor) + 'px';
 
-                alert(imageElement.naturalWidth + " " + imageElement.naturalHeight + "\n" +
-                    element.clientWidth + " " + element.clientHeight + "\n" + setSize);
-
-                //bgImageElement.style.backgroundSize = maxDimension + 'px';
+                /*alert(imageElement.naturalWidth + " " + imageElement.naturalHeight + "\n" +
+                    element.clientWidth + " " + element.clientHeight + "\n" + setSize);*/
 
                 layer2.style.marginTop = '0%';
                 layer2.style.marginBottom = '0%';
