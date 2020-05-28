@@ -88,8 +88,11 @@
 
         //add any background image container class signatures here
         var bgImageContainers = document.getElementsByClassName("css-1dbjc4n r-1p0dtai r-1mlwlqe r-1d2f490 r-11wrixw r-1udh08x r-u8s1d r-zchlnj r-ipm5af r-417010");
-
         processBgImageContainers(bgImageContainers);
+
+        bgImageContainers = document.getElementsByClassName("css-1dbjc4n r-1p0dtai r-1mlwlqe r-1d2f490 r-61z16t r-1mnahxq r-1udh08x r-u8s1d r-zchlnj r-ipm5af r-417010");
+        processBgImageContainers(bgImageContainers);
+
         return;
     }
 
