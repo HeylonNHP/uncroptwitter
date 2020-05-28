@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitter uncrop
 // @namespace    http://tampermonkey.net/
-// @version      0.2.7
+// @version      0.2.8
 // @description  try to take over the world!
 // @author       You
 // @match        https://twitter.com/home
@@ -72,6 +72,7 @@
                     break;
                 }else {
                     paddedContainer = paddedContainer.parentElement;
+                    alert(paddedContainer.style.paddingBottom);
                 }
             }
             paddedContainer.style.paddingBottom = '100%';
