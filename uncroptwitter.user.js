@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitter uncrop
 // @namespace    http://tampermonkey.net/
-// @version      0.2.9
+// @version      0.2.10
 // @description  try to take over the world!
 // @author       You
 // @match        https://twitter.com/home
@@ -16,6 +16,19 @@
 
         for(var j = 0; j<bgImageContainers.length;++j){
             var bgImageContainer = bgImageContainers[j];
+
+            //Increase the image container size
+            var paddedContainer = bgImageContainer;
+
+            while (paddedContainer.firstChild.style.paddingBottom != '56.25%'){
+                if (null == paddedContainer.parentElement){
+                    break;
+                }else {
+                    paddedContainer = paddedContainer.parentElement;
+                }
+            }
+            paddedContainer.firstChild.style.paddingBottom = '100%';
+
             /*alert("MI - " + bgImageContainer.innerHTML +
                 "\n mTop" + bgImageContainer.style.marginTop +
                 "\n mLeft" + bgImageContainer.style.marginLeft +
@@ -63,18 +76,6 @@
             //Scale the image
             imageDiv.style.backgroundSize = (imageW*scaleFactor) + 'px ' +
                 (imageH*scaleFactor) + 'px';
-
-            //Increase the image container size
-            var paddedContainer = bgImageContainer;
-
-            while (paddedContainer.firstChild.style.paddingBottom != '56.25%'){
-                if (null == paddedContainer.parentElement){
-                    break;
-                }else {
-                    paddedContainer = paddedContainer.parentElement;
-                }
-            }
-            paddedContainer.firstChild.style.paddingBottom = '100%';
         }
         //alert("multi-image done");
     }
