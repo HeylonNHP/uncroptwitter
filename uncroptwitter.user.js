@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitter uncrop
 // @namespace    http://tampermonkey.net/
-// @version      0.3.2
+// @version      0.3.3
 // @description  try to take over the world!
 // @author       You
 // @match        https://twitter.com/home
@@ -80,6 +80,13 @@
             //Scale the image
             imageDiv.style.backgroundSize = (imageW*scaleFactor) + 'px ' +
                 (imageH*scaleFactor) + 'px';
+
+            //Aesthetics
+            //Set the container height to the image height
+            if(imageDiv.clientHeight<bgImageContainer.clientHeight){
+                var scaleFactorContainer = (imageH/imageW);
+                paddedContainer.firstChild.style.paddingBottom = scaleFactorContainer + '%';
+            }
         }
         //alert("multi-image done");
     }
