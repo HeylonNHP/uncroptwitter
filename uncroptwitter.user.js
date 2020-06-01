@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitter uncrop
 // @namespace    http://tampermonkey.net/
-// @version      0.3.3
+// @version      0.3.4
 // @description  try to take over the world!
 // @author       You
 // @match        https://twitter.com/home
@@ -83,6 +83,8 @@
 
             //Aesthetics
             //Set the container height to the image height
+            alert(imageDiv.clientHeight + " " + bgImageContainer.clientHeight + "\n"
+            + paddedContainer.firstChild.style.paddingBottom);
             if(imageDiv.clientHeight<bgImageContainer.clientHeight){
                 var scaleFactorContainer = (imageH/imageW);
                 paddedContainer.firstChild.style.paddingBottom = scaleFactorContainer + '%';
