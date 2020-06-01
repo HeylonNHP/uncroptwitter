@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitter uncrop
 // @namespace    http://tampermonkey.net/
-// @version      0.3.4
+// @version      0.3.8
 // @description  try to take over the world!
 // @author       You
 // @match        https://twitter.com/home
@@ -18,8 +18,7 @@
             var bgImageContainer = bgImageContainers[j];
 
             //Increase the image container size
-            var paddedContainer = bgImageContainer;
-
+            let paddedContainer = bgImageContainer;
             try{
                 while (paddedContainer.firstChild.style.paddingBottom != '56.25%'){
                     if (null == paddedContainer.parentElement){
@@ -83,11 +82,16 @@
 
             //Aesthetics
             //Set the container height to the image height
-            alert(imageDiv.clientHeight + " " + bgImageContainer.clientHeight + "\n"
-            + paddedContainer.firstChild.style.paddingBottom);
-            if(imageDiv.clientHeight<bgImageContainer.clientHeight){
-                var scaleFactorContainer = (imageH/imageW);
-                paddedContainer.firstChild.style.paddingBottom = scaleFactorContainer + '%';
+            try{
+                //if(((bgImageContainer.clientWidth/imageW)*imageH) < bgImageContainer.clientHeight){
+                    var scaleFactorContainer = ((bgImageContainer.clientWidth/imageW)*imageH)/bgImageContainer.clientHeight;
+
+                    paddedContainer.firstChild.style.paddingBottom = (scaleFactorContainer*100) + '%';
+                //}else {
+                //    paddedContainer.firstChild.style.paddingBottom = '99%';
+                    //alert(((bgImageContainer.clientWidth/imageW)*imageH) + " actual height: " + bgImageContainer.clientHeight);
+                //}
+            }catch (e) {
             }
         }
         //alert("multi-image done");
