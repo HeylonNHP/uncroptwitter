@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitter uncrop
 // @namespace    http://tampermonkey.net/
-// @version      0.3.8
+// @version      0.4.0
 // @description  try to take over the world!
 // @author       You
 // @match        https://twitter.com/home
@@ -12,12 +12,12 @@
     'use strict';
 
     function processBgImageContainers(bgImageContainers) {
-        //alert(bgImageContainers.length + " BG");
 
         for(var j = 0; j<bgImageContainers.length;++j){
             var bgImageContainer = bgImageContainers[j];
 
             //Increase the image container size
+            let newSize = 100;
             let paddedContainer = bgImageContainer;
             try{
                 while (paddedContainer.firstChild.style.paddingBottom != '56.25%'){
@@ -27,15 +27,10 @@
                         paddedContainer = paddedContainer.parentElement;
                     }
                 }
-                paddedContainer.firstChild.style.paddingBottom = '100%';
+                paddedContainer.firstChild.style.paddingBottom = newSize + '%';
             }catch (e) {
 
             }
-
-            /*alert("MI - " + bgImageContainer.innerHTML +
-                "\n mTop" + bgImageContainer.style.marginTop +
-                "\n mLeft" + bgImageContainer.style.marginLeft +
-                "\n mBottom" + bgImageContainer.style.marginBottom);*/
 
             //Remove padding so image is centred
             bgImageContainer.style.marginTop = '0%';
@@ -54,11 +49,6 @@
             var imageDiv2 = bgImageContainer.lastChild;
             var imageW = imageDiv2.naturalWidth;
             var imageH = imageDiv2.naturalHeight;
-
-            imageDiv.style.backgroundSize = "50px";
-            /*alert("img " + containerW + " " + containerH + "\n"+
-                imageW + " " + imageH + "\n" +
-                bgImageContainerParent.innerHTML);*/
 
             //Generate scaling factors for either
             //Fitting the image by its width
@@ -82,19 +72,29 @@
 
             //Aesthetics
             //Set the container height to the image height
-            try{
-                //if(((bgImageContainer.clientWidth/imageW)*imageH) < bgImageContainer.clientHeight){
-                    var scaleFactorContainer = ((bgImageContainer.clientWidth/imageW)*imageH)/bgImageContainer.clientHeight;
 
-                    paddedContainer.firstChild.style.paddingBottom = (scaleFactorContainer*100) + '%';
-                //}else {
-                //    paddedContainer.firstChild.style.paddingBottom = '99%';
-                    //alert(((bgImageContainer.clientWidth/imageW)*imageH) + " actual height: " + bgImageContainer.clientHeight);
-                //}
+            paddedContainer = bgImageContainer;
+            try{
+                //Must re-find the padded container for the second time
+                //Because for some reason if i don't, accessing the paddedContainer
+                //variable returns an undefined exception
+                //But only sometimes
+                //Why? I don't know, JavaScript is retarded.
+                while (paddedContainer.firstChild.style.paddingBottom != newSize + '%'){
+                    if (null == paddedContainer.parentElement){
+                        break;
+                    }else {
+                        paddedContainer = paddedContainer.parentElement;
+                    }
+                }
+
+
+                var scaleFactorContainer = ((bgImageContainer.clientWidth/imageW)*imageH)/bgImageContainer.clientHeight;
+                paddedContainer.firstChild.style.paddingBottom = (scaleFactorContainer*100) + '%';
             }catch (e) {
+                console.log("error with: " + imageDiv.style.backgroundImage + " error message: " + e.message);
             }
         }
-        //alert("multi-image done");
     }
 
     function processImages() {
