@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Twitter uncrop
 // @namespace    http://tampermonkey.net/
-// @version      0.4.2
+// @version      0.4.2.1
 // @description  try to take over the world!
 // @author       You
-// @match        https://twitter.com/
+// @match        https://twitter.com/*
 // @grant        none
 // ==/UserScript==
 
